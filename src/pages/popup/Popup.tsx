@@ -36,6 +36,7 @@ const Popup = () => {
           onClick={exampleThemeStorage.toggle}>
           Toggle theme
         </button>
+        <div className="font-bold w-20 h-20 bg-red-500">asdfd</div>
       </header>
     </div>
   );
