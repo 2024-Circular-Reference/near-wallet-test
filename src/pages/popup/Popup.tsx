@@ -1,45 +1,52 @@
-import React from 'react';
-import logo from '@assets/img/logo.svg';
 import '@pages/popup/Popup.css';
-import useStorage from '@src/shared/hooks/useStorage';
-import exampleThemeStorage from '@src/shared/storages/exampleThemeStorage';
 import withSuspense from '@src/shared/hoc/withSuspense';
 import withErrorBoundary from '@src/shared/hoc/withErrorBoundary';
+import MainLayout from './components/layout/MainLayout';
+import { useRef } from 'react';
+import { sendMessageToBackgroundAsync } from '@root/src/chrome/message';
+import { accountExists, createNearAccount } from '../background/lib/utils/near/account';
 
-const Popup = () => {
-  const theme = useStorage(exampleThemeStorage);
+const loginNear = async (id: string, pw: string) => {
+  console.log('loginNear');
+  const res = await sendMessageToBackgroundAsync({
+    type: 'LoginNear',
+    input: {
+      id,
+      pw,
+    },
+    data: 'login',
+  });
+  await accountExists('test.kimcookieya.testnet');
+  await createNearAccount('kimcookieya.testnet', 'test.kimcookieya.testnet', '10000000000000000000000');
+  return res;
+};
+
+function Popup() {
+  const idRef = useRef<HTMLInputElement>();
+  const pwRef = useRef<HTMLInputElement>();
+
+  const handleSubmit = async () => {
+    if (idRef.current && pwRef.current) {
+      console.log('login');
+      const res = await loginNear(idRef.current.value, pwRef.current.value);
+      alert(res);
+    } else {
+      alert('id or pw is empty');
+    }
+  };
 
   return (
-    <div
-      className="App"
-      style={{
-        backgroundColor: theme === 'light' ? '#fff' : '#000',
-      }}>
-      <header className="App-header" style={{ color: theme === 'light' ? '#000' : '#fff' }}>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/pages/popup/Popup.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: theme === 'light' && '#0281dc', marginBottom: '10px' }}>
-          Learn React!
-        </a>
-        <button
-          style={{
-            backgroundColor: theme === 'light' ? '#fff' : '#000',
-            color: theme === 'light' ? '#000' : '#fff',
-          }}
-          onClick={exampleThemeStorage.toggle}>
-          Toggle theme
+    <MainLayout>
+      <section className="flex flex-col w-full min-h-screen items-center justify-center noscroll gap-y-2">
+        <p>hello, popup!!</p>
+        <input ref={idRef} placeholder="id" className="w-40 h-8 border rounded-xl px-2" />
+        <input ref={pwRef} placeholder="pw" className="w-40 h-8 border rounded-xl px-2" />
+        <button onClick={handleSubmit} className="w-40 h-8 bg-gray-900 text-white rounded-xl">
+          Submit
         </button>
-        <div className="font-bold w-20 h-20 bg-red-500">asdfd</div>
-      </header>
-    </div>
+      </section>
+    </MainLayout>
   );
-};
+}
 
 export default withErrorBoundary(withSuspense(Popup, <div> Loading ... </div>), <div> Error Occur </div>);

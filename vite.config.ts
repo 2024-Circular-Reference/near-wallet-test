@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import path, { resolve } from 'path';
 import makeManifest from './utils/plugins/make-manifest';
 import customDynamicImport from './utils/plugins/custom-dynamic-import';
@@ -40,6 +41,13 @@ export default defineConfig({
     addHmr({ background: enableHmrInBackgroundScript, view: true }),
     isDev && watchRebuild({ afterWriteBundle: regenerateCacheInvalidationKey }),
     inlineVitePreloadScript(),
+    nodePolyfills({
+      globals: {
+        process: true,
+        Buffer: true,
+        global: true,
+      },
+    }),
   ],
   publicDir,
   build: {

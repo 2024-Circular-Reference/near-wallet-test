@@ -1,3 +1,9 @@
+import type Chrome from 'chrome';
+
+declare namespace chrome {
+  export default Chrome;
+}
+
 declare module 'virtual:reload-on-update-in-background-script' {
   export const reloadOnUpdate: (watchPath: string) => void;
   export default reloadOnUpdate;
@@ -28,4 +34,33 @@ declare module '*.png' {
 declare module '*.json' {
   const content: string;
   export default content;
+}
+
+declare global {
+  type LoginNear = {
+    type: 'LoginNear';
+    input: {
+      id: string;
+      pw: string;
+    };
+    data: 'login';
+  };
+
+  type LogoutNear = {
+    type: 'LogoutNear';
+    input?: never;
+    data: 'logout';
+  };
+
+  type ErrorMessage = {
+    type: 'Error';
+    input?: never;
+    error: Error;
+    data?: never;
+  };
+
+  type Message = LoginNear | LogoutNear;
+
+  type RequestMessage<M = Message> = Omit<M, 'data'>;
+  type ResponseMessage<M = Message> = Omit<M, 'input' | 'error'>;
 }
