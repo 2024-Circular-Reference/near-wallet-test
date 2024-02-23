@@ -1,7 +1,7 @@
 {
-  "name": "chrome-extension-boilerplate-react-vite",
+  "name": "Circuit Reference Wallet",
   "version": "0.0.1",
-  "description": "chrome extension boilerplate",
+  "description": "PNU 2024 - Circuit Reference Wallet",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -30,7 +30,8 @@
     "near-api-js": "^3.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "webextension-polyfill": "0.10.0"
+    "webextension-polyfill": "0.10.0",
+    "zustand": "^4.5.1"
   },
   "devDependencies": {
     "@commitlint/cli": "18.4.4",

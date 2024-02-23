@@ -1,4 +1,4 @@
-import { sendErrorMessageToClient, sendMessageToClient } from '@root/src/chrome/message';
+import { sendErrorMessageToClient, sendMessageToClient } from '@src/chrome/message';
 
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script';
 import 'webextension-polyfill';
