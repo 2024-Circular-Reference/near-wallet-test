@@ -15,11 +15,11 @@ export default function LoginSection() {
   };
 
   return (
-    <section className="flex flex-col w-full min-h-screen items-center justify-center noscroll gap-y-2">
+    <section className="flex flex-col w-full items-center justify-center noscroll gap-y-8 px-16">
       <p>hello, popup!!</p>
-      <input ref={idRef} placeholder="id" className="w-40 h-8 border rounded-xl px-2" />
-      <input ref={pwRef} placeholder="pw" className="w-40 h-8 border rounded-xl px-2" />
-      <button onClick={handleSubmit} className="w-40 h-8 bg-gray-900 text-white rounded-xl">
+      <input ref={idRef} placeholder="id" className="w-full h-32 border rounded-xl focus:outline-none" />
+      <input ref={pwRef} placeholder="pw" className="w-full h-32 border rounded-xl focus:outline-none" />
+      <button onClick={handleSubmit} className="w-full h-32 bg-gray-900 text-white rounded-xl">
         Submit
       </button>
     </section>

@@ -6,6 +6,7 @@ import { sendMessageToBackgroundAsync } from '@src/chrome/message';
 import Link from '@src/components/Link';
 import { useRouter } from '@src/stores/useRouter';
 import LoginSection from '@root/src/components/LoginSection';
+import SignupSection from '@root/src/components/signup/SignupSection';
 
 const loginNear = async (id: string, pw: string) => {
   console.log('loginNear');
@@ -38,7 +39,7 @@ function Popup() {
       </ul>
       {pathname === '/' && <div>Popup</div>}
       {pathname === '/login' && <LoginSection />}
-      {pathname === '/signup' && <div>signup</div>}
+      {pathname === '/signup' && <SignupSection />}
     </MainLayout>
   );
 }
