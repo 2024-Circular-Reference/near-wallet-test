@@ -7,7 +7,7 @@ type MainLayoutProps = {
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <main className="relative h-600">
-      <header className="h-8 text-center text-white bg-gray-900 flex items-center justify-center noscroll">
+      <header className="h-32 text-center text-white bg-gray-900 flex items-center justify-center noscroll">
         Test용 니어 지갑
       </header>
       {children}

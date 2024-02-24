@@ -1,32 +1,18 @@
 import '@pages/popup/Popup.css';
 import withSuspense from '@src/shared/hoc/withSuspense';
 import withErrorBoundary from '@src/shared/hoc/withErrorBoundary';
-import MainLayout from './layouts/MainLayout';
-import { sendMessageToBackgroundAsync } from '@src/chrome/message';
-import Link from '@src/components/Link';
+import MainLayout from '@root/src/pages/popup/layouts/MainLayout';
+import Link from '@root/src/pages/popup/components/Link';
 import { useRouter } from '@src/stores/useRouter';
-import LoginSection from '@root/src/components/LoginSection';
-import SignupSection from '@root/src/components/signup/SignupSection';
-
-const loginNear = async (id: string, pw: string) => {
-  console.log('loginNear');
-  const res = await sendMessageToBackgroundAsync({
-    type: 'LoginNear',
-    input: {
-      id,
-      pw,
-    },
-    data: 'login',
-  });
-  return res;
-};
+import LoginSection from '@root/src/pages/popup/components/LoginSection';
+import SignupSection from '@root/src/pages/popup/components/signup/SignupSection';
 
 function Popup() {
   const { pathname } = useRouter();
 
   return (
     <MainLayout>
-      <ul>
+      <ul className="flex gap-x-8 w-full justify-center">
         <li>
           <Link pathname="/">Home</Link>
         </li>

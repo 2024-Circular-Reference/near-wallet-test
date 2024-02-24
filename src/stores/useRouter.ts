@@ -7,6 +7,6 @@ interface RouterState {
 }
 
 export const useRouter = create<RouterState>(set => ({
-  pathname: '/',
+  pathname: '/signup',
   setPathname: (pathname: Pathname) => set({ pathname }),
 }));

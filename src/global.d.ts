@@ -59,7 +59,16 @@ declare global {
     data?: never;
   };
 
-  type Message = LoginNear | LogoutNear;
+  type CreateAccount = {
+    type: 'CreateAccount';
+    input: {
+      id: string;
+      pw: string;
+    };
+    data: 'create';
+  };
+
+  type Message = LoginNear | LogoutNear | CreateAccount;
 
   type RequestMessage<M = Message> = Omit<M, 'data'>;
   type ResponseMessage<M = Message> = Omit<M, 'input' | 'error'>;
