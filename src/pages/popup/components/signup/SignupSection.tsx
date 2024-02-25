@@ -9,8 +9,8 @@ const createAccount = async (id: string, pw: string) => {
       id,
       pw,
     },
-    data: 'create',
   });
+  console.log(res);
   return res;
 };
 
@@ -21,8 +21,11 @@ export default function SignupSection() {
   const handleSubmit = async () => {
     if (accountIdRef.current?.value !== '' && accountPwRef.current?.value !== '') {
       console.log('login');
+      // alert(
+      //   'Near Account를 생성하는 중입니다!\nid:' + accountIdRef.current.value + '\npw:' + accountPwRef.current.value,
+      // );
       const res = await createAccount(accountIdRef.current.value, accountPwRef.current.value);
-      alert(res);
+      alert(res.seedPhrase, res.publicKey, res.secretKey);
     } else {
       alert('id or pw is empty');
     }

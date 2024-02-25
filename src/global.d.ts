@@ -65,7 +65,11 @@ declare global {
       id: string;
       pw: string;
     };
-    data: 'create';
+    data?: {
+      seedPhrase: string;
+      publicKey: string;
+      secretKey: string;
+    };
   };
 
   type Message = LoginNear | LogoutNear | CreateAccount;

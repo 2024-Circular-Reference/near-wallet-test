@@ -3,6 +3,7 @@ import { sendErrorMessageToClient, sendMessageToClient } from '@src/chrome/messa
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script';
 import 'webextension-polyfill';
 import Logger from './lib/utils/logger';
+import { generateSeedPhrase } from './lib/utils/near/phrase';
 
 reloadOnUpdate('pages/background');
 
@@ -35,6 +36,20 @@ chrome.runtime.onConnect.addListener(port => {
           sendResponse({
             type: 'LoginNear',
             data: 'login',
+          });
+          break;
+        }
+        case 'CreateAccount': {
+          console.log('create account!');
+          const { seedPhrase, publicKey, secretKey } = generateSeedPhrase();
+          sendResponse({
+            type: 'CreateAccount',
+            data: {
+              seedPhrase,
+              publicKey,
+              secretKey,
+            },
+            input: message.input,
           });
           break;
         }
