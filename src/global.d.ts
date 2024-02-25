@@ -72,7 +72,15 @@ declare global {
     };
   };
 
-  type Message = LoginNear | LogoutNear | CreateAccount;
+  type GetPhrase = {
+    type: 'GetPhrase';
+    input?: never;
+    data: {
+      seedPhrase: string;
+    };
+  };
+
+  type Message = LoginNear | LogoutNear | CreateAccount | GetPhrase;
 
   type RequestMessage<M = Message> = Omit<M, 'data'>;
   type ResponseMessage<M = Message> = Omit<M, 'input' | 'error'>;

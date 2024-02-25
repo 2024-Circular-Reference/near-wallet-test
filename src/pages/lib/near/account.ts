@@ -19,17 +19,6 @@ export async function createNearAccount(creatprAccountId: string, newAccountId: 
   await myKeyStore.setKey(config.networkId, newAccountId, keyPair);
   try {
     await creatorAccount.createAccount(newAccountId, publicKey, utils.format.parseNearAmount(amount));
-    // const res = await creatorAccount.functionCall({
-    //   contractId: config.networkId,
-    //   methodName: 'create_account',
-    //   args: {
-    //     new_account_id: newAccountId,
-    //     new_public_key: publicKey,
-    //   },
-    //   gas: '300000000000000',
-    //   attachedDeposit: utils.format.parseNearAmount(amount),
-
-    // });
     console.log('Account creation successful');
     return true;
   } catch (error) {

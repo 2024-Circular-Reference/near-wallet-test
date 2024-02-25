@@ -36,6 +36,7 @@ export default function InitSection() {
       }
       const res = await createAccount(accountIdRef.current.value, accountPwRef.current.value);
       console.log(res.seedPhrase, res.publicKey, res.secretKey);
+
       setPathname('/create-wallet');
     } else {
       setIsAvailable(false);
@@ -55,8 +56,16 @@ export default function InitSection() {
             'relative overflow-hidden text-base flex rounded-full border text-lg',
             isAvailable ? 'border-green-300' : 'border-red-500',
           )}>
-          <input ref={accountIdRef} className="ml-8 w-fit focus:outline-none" type="text" placeholder="Account ID" />
+          <input ref={accountIdRef} placeholder="Account ID" className="ml-8 w-fit focus:outline-none" type="text" />
           <p className="absolute right-8">.testnet</p>
+        </div>
+        <div
+          className={cls(
+            'relative overflow-hidden text-base flex rounded-full border text-lg',
+            isAvailable ? 'border-green-300' : 'border-red-500',
+          )}>
+          <input ref={accountPwRef} placeholder="Password" className="ml-8 w-fit focus:outline-none" type="text" />
+          <p className="absolute right-8"></p>
         </div>
       </div>
       <div className="flex flex-col w-full">

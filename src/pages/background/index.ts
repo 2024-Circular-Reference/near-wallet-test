@@ -1,4 +1,5 @@
 import { sendErrorMessageToClient, sendMessageToClient } from '@src/chrome/message';
+import { WalletStorage } from '@pages/background/lib/storage/walletStorage';
 
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script';
 import 'webextension-polyfill';
@@ -26,9 +27,6 @@ chrome.runtime.onConnect.addListener(port => {
       sendMessageToClient(port, message);
     };
     try {
-      console.log('start');
-      //const nearClient = await connectNearProtocol();
-      console.log('end');
       switch (message.type) {
         case 'LoginNear': {
           console.log(message.input);
@@ -42,12 +40,24 @@ chrome.runtime.onConnect.addListener(port => {
         case 'CreateAccount': {
           console.log('create account!');
           const { seedPhrase, publicKey, secretKey } = generateSeedPhrase();
+          await WalletStorage.setAccount(message.input.id, seedPhrase, publicKey, secretKey);
           sendResponse({
             type: 'CreateAccount',
             data: {
               seedPhrase,
               publicKey,
               secretKey,
+            },
+            input: message.input,
+          });
+          break;
+        }
+        case 'GetPhrase': {
+          const seedPhrase = await WalletStorage.getSeedPhrase(message.input);
+          sendResponse({
+            type: 'GetPhrase',
+            data: {
+              seedPhrase,
             },
             input: message.input,
           });
