@@ -2,8 +2,8 @@ import { sendErrorMessageToClient, sendMessageToClient } from '@src/chrome/messa
 
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script';
 import 'webextension-polyfill';
-import Logger from './lib/utils/logger';
-import { generateSeedPhrase } from './lib/utils/near/phrase';
+import Logger from '@src/pages/lib/utils/logger';
+import { generateSeedPhrase } from '@src/pages/lib/near/phrase';
 
 reloadOnUpdate('pages/background');
 

@@ -6,13 +6,14 @@ import { useRouter } from '@src/stores/useRouter';
 import LoginWalletSection from '@root/src/pages/popup/app/login-wallet/index';
 import CreateWalletSection from '@root/src/pages/popup/app/create-wallet/index';
 import ImportWalletSection from '@root/src/pages/popup/app/import-wallet/index';
+import InitSection from './app/init';
 
 function Popup() {
   const { pathname } = useRouter();
 
   return (
     <MainLayout>
-      {pathname === '/' && <div>Popup</div>}
+      {pathname === '/' && <InitSection />}
       {pathname === '/login-wallet' && <LoginWalletSection />}
       {pathname === '/create-wallet' && <CreateWalletSection />}
       {pathname === '/import-wallet' && <ImportWalletSection />}

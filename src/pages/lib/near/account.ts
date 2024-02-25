@@ -38,24 +38,23 @@ export async function createNearAccount(creatprAccountId: string, newAccountId: 
   }
 }
 
-const provider = new providers.JsonRpcProvider('https://archival-rpc.testnet.near.org');
+const provider = new providers.JsonRpcProvider({ url: 'https://rpc.testnet.near.org' });
 
-export async function accountExists(newAccountId: string) {
-  let rawResult;
-
-  for (const account_id of ['kimcookieya.testnet', newAccountId]) {
-    let succeeded = true;
-    try {
-      rawResult = await provider.query({
-        request_type: 'view_account',
-        account_id: account_id,
-        finality: 'final',
-      });
-    } catch (e) {
-      if (e.type === 'AccountDoesNotExist') {
-        succeeded = false;
-      }
+export async function isAccountIdAvailable(newAccountId: string) {
+  let isExist = true;
+  try {
+    const rawResult = await provider.query({
+      request_type: 'view_account',
+      account_id: newAccountId + '.testnet',
+      finality: 'final',
+    });
+    console.log(rawResult);
+  } catch (e) {
+    console.log(e);
+    if (e.type === 'AccountDoesNotExist') {
+      isExist = false;
     }
-    console.log(succeeded ? `The account ${account_id} exists.` : `There is no account ${account_id}.`);
   }
+  console.log(isExist ? `The account ${newAccountId} exists.` : `There is no account ${newAccountId}.`);
+  return !isExist;
 }
