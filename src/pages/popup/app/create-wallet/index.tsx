@@ -14,7 +14,7 @@ const createAccount = async (id: string, pw: string) => {
   return res;
 };
 
-export default function SignupSection() {
+export default function CreateWalletSection() {
   const accountIdRef = useRef<HTMLInputElement>();
   const accountPwRef = useRef<HTMLInputElement>();
 
@@ -25,7 +25,7 @@ export default function SignupSection() {
       //   'Near Account를 생성하는 중입니다!\nid:' + accountIdRef.current.value + '\npw:' + accountPwRef.current.value,
       // );
       const res = await createAccount(accountIdRef.current.value, accountPwRef.current.value);
-      alert(res.seedPhrase, res.publicKey, res.secretKey);
+      alert(res.seedPhrase + res.publicKey + res.secretKey);
     } else {
       alert('id or pw is empty');
     }
@@ -35,7 +35,7 @@ export default function SignupSection() {
     <section className="bg-white">
       <div className="max-w-7xl mx-auto py-16 px-4">
         <div className="text-center">
-          <h2 className="text-base font-semibold text-indigo-600 tracking-wide uppercase">Sign up</h2>
+          <h2 className="text-base font-semibold text-indigo-600 tracking-wide uppercase">Create Account</h2>
           <p className="mt-1 text-4xl font-extrabold text-gray-900">Create an account!!</p>
           <div className="flex flex-col gap-y-8 mt-24">
             <input

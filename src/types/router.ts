@@ -1,1 +1,1 @@
-export type Pathname = '/' | '/login' | '/signup';
+export type Pathname = '/' | '/login-wallet' | '/create-wallet' | '/import-wallet';
