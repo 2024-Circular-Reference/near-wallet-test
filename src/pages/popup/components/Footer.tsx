@@ -11,6 +11,7 @@ export default function Footer() {
         <LiLink pathname="/login-wallet">Login</LiLink>
         <LiLink pathname="/create-wallet">Create</LiLink>
         <LiLink pathname="/import-wallet">Import</LiLink>
+        <LiLink pathname="/home">Home</LiLink>
       </ul>
     </footer>
   );
