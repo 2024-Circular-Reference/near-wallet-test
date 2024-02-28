@@ -1,4 +1,5 @@
 import { ILocalStorage, LocalStorage } from '@src/chrome/localStorage';
+import { User } from '@root/src/types/user';
 
 export class WalletStorage {
   private static WALLET = 'WALLET';
@@ -10,24 +11,23 @@ export class WalletStorage {
     return seedPhrase;
   }
 
-  static async setAccountId(accountId: string) {
-    const account = await this.storage.load(this.WALLET);
-    await this.storage.save(this.WALLET, { ...account, accountId });
+  static async getAccountId() {
+    const { accountId } = (await this.storage.load(this.WALLET)) as User;
     return accountId;
   }
 
   static async getSeedPhrase() {
-    const { seedPhrase } = await this.storage.load(this.WALLET);
+    const { seedPhrase } = (await this.storage.load(this.WALLET)) as User;
     return seedPhrase;
   }
 
   static async getPublicKey() {
-    const { publicKey } = await this.storage.load(this.WALLET);
+    const { publicKey } = (await this.storage.load(this.WALLET)) as User;
     return publicKey;
   }
 
   static async getSecretKey() {
-    const { secretKey } = await this.storage.load(this.WALLET);
+    const { secretKey } = (await this.storage.load(this.WALLET)) as User;
     return secretKey;
   }
 }

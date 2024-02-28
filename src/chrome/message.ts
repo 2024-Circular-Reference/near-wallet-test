@@ -75,5 +75,5 @@ export function sendErrorMessageToClient(port: chrome.runtime.Port, error: unkno
     sendError.message = error.message;
   }
 
-  sendMessageToClient(port, { type: 'Error', error: sendError });
+  sendMessageToClient(port, { type: 'Error', error: sendError, code: 400 });
 }

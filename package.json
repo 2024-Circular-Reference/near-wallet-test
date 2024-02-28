@@ -1,5 +1,5 @@
 {
-  "name": "Circuit-Reference-Wallet",
+  "   name": "Circuit-Reference-Wallet",
   "version": "0.0.1",
   "description": "PNU 2024 - Circuit Reference Wallet",
   "license": "MIT",
@@ -21,7 +21,8 @@
     "lint": "eslint src --ext .ts,.js,.tsx,.jsx",
     "lint:fix": "pnpm lint --fix",
     "prettier": "prettier . --write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "chrome": "google-chrome"
   },
   "type": "module",
   "dependencies": {

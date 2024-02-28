@@ -2,18 +2,18 @@ import NearProtocolImage from '@assets/img/near-protocol-logo.png';
 import Link from '../../components/Link';
 import { useRef, useState } from 'react';
 import { sendMessageToBackgroundAsync } from '@root/src/chrome/message';
-import { isAccountIdAvailable } from '@root/src/pages/lib/near/account';
+import { createNearAccountOnTestnet, isAccountIdAvailable } from '@root/src/pages/lib/near/account';
 import { useRouter } from '@root/src/stores/useRouter';
 import { cls } from '@root/utils/util';
 
-const createAccount = async (id: string, pw: string) => {
+const createAccount = async (id: string) => {
   console.log('create account');
   const res = await sendMessageToBackgroundAsync({
     type: 'CreateAccount',
     input: {
       id,
-      pw,
     },
+    code: 200,
   });
   console.log(res);
   return res;
@@ -28,16 +28,19 @@ export default function InitSection() {
   const handleSubmit = async () => {
     if (accountIdRef.current?.value !== '') {
       console.log('login');
-      const isAvailable = await isAccountIdAvailable(accountIdRef.current.value);
+      const isAvailable = await isAccountIdAvailable(accountIdRef.current.value + '.testnet');
       setIsAvailable(isAvailable);
-      if (!isAvailable) {
-        alert('Account ID is already used');
-        return;
-      }
-      const res = await createAccount(accountIdRef.current.value, accountPwRef.current.value);
-      console.log(res.seedPhrase, res.publicKey, res.secretKey);
+      // if (!isAvailable) {
+      //   alert('Account ID is already used');
+      //   return;
+      // }
+      // const res = await createAccount(accountIdRef.current.value, accountPwRef.current.value);
+      // console.log(res.seedPhrase, res.publicKey, res.secretKey);
 
-      setPathname('/create-wallet');
+      const res = await createAccount(accountIdRef.current.value + '.testnet');
+      alert(res);
+
+      //setPathname('/create-wallet');
     } else {
       setIsAvailable(false);
     }

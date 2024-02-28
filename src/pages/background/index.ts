@@ -4,7 +4,7 @@ import { WalletStorage } from '@pages/background/lib/storage/walletStorage';
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script';
 import 'webextension-polyfill';
 import Logger from '@src/pages/lib/utils/logger';
-import { generateSeedPhrase } from '@src/pages/lib/near/phrase';
+import { createNearAccountOnTestnet } from '../lib/near/account';
 
 reloadOnUpdate('pages/background');
 
@@ -12,6 +12,7 @@ type RequiredDataNullableInput<T extends Message> = {
   type: T['type'];
   input?: unknown;
   data: Exclude<T['data'], undefined>;
+  code: number;
 };
 
 chrome.runtime.onConnect.addListener(port => {
@@ -29,37 +30,45 @@ chrome.runtime.onConnect.addListener(port => {
     try {
       switch (message.type) {
         case 'LoginNear': {
-          console.log(message.input);
-          //await createNearAccount(nearClient);
           sendResponse({
             type: 'LoginNear',
             data: 'login',
+            code: 200,
           });
           break;
         }
         case 'CreateAccount': {
           console.log('create account!');
-          const { seedPhrase, publicKey, secretKey } = generateSeedPhrase();
-          await WalletStorage.setAccount(message.input.id, seedPhrase, publicKey, secretKey);
-          sendResponse({
-            type: 'CreateAccount',
-            data: {
-              seedPhrase,
-              publicKey,
-              secretKey,
-            },
-            input: message.input,
-          });
+          const res = await createNearAccountOnTestnet(message.input.id);
+          if (res) {
+            const { seedPhrase, publicKey, secretKey } = res;
+            await WalletStorage.setAccount(message.input.id, seedPhrase, publicKey, secretKey);
+            sendResponse({
+              type: 'CreateAccount',
+              data: {
+                seedPhrase,
+                publicKey,
+                secretKey,
+              },
+              code: 200,
+            });
+          } else {
+            sendResponse({
+              type: 'CreateAccount',
+              data: undefined,
+              code: 400,
+            });
+          }
           break;
         }
         case 'GetPhrase': {
-          const seedPhrase = await WalletStorage.getSeedPhrase(message.input);
+          const seedPhrase = await WalletStorage.getSeedPhrase();
           sendResponse({
             type: 'GetPhrase',
             data: {
               seedPhrase,
             },
-            input: message.input,
+            code: 200,
           });
           break;
         }

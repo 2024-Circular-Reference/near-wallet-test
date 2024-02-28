@@ -1,6 +1,7 @@
 import { utils, keyStores, KeyPair, connect, providers } from 'near-api-js';
+import { Seed, generateSeedPhrase } from 'near-seed-phrase';
 
-const myKeyStore = new keyStores.BrowserLocalStorageKeyStore();
+const myKeyStore = new keyStores.InMemoryKeyStore();
 
 const config = {
   networkId: 'testnet',
@@ -34,7 +35,7 @@ export async function isAccountIdAvailable(newAccountId: string) {
   try {
     const rawResult = await provider.query({
       request_type: 'view_account',
-      account_id: newAccountId + '.testnet',
+      account_id: newAccountId,
       finality: 'final',
     });
     console.log(rawResult);
@@ -46,4 +47,24 @@ export async function isAccountIdAvailable(newAccountId: string) {
   }
   console.log(isExist ? `The account ${newAccountId} exists.` : `There is no account ${newAccountId}.`);
   return !isExist;
+}
+
+export async function createNearAccountOnTestnet(newAccountId: string): Promise<Seed | undefined> {
+  const near = await connect(config);
+  const { seedPhrase, publicKey, secretKey } = generateSeedPhrase();
+  const keyPair = KeyPair.fromString(secretKey);
+
+  try {
+    await myKeyStore.setKey(config.networkId, newAccountId, keyPair);
+    const account = await near.createAccount(newAccountId, keyPair.getPublicKey());
+    console.log(account);
+    console.log('your seed phrase: ' + seedPhrase);
+    console.log('Account creation successful');
+    console.log(await account.getAccountBalance());
+    console.log(await account.getAccountDetails());
+    return { seedPhrase, publicKey, secretKey };
+  } catch (error) {
+    console.error('Account creation failed:', error);
+    return undefined;
+  }
 }

@@ -44,12 +44,14 @@ declare global {
       pw: string;
     };
     data: 'login';
+    code: number;
   };
 
   type LogoutNear = {
     type: 'LogoutNear';
     input?: never;
     data: 'logout';
+    code: number;
   };
 
   type ErrorMessage = {
@@ -57,19 +59,20 @@ declare global {
     input?: never;
     error: Error;
     data?: never;
+    code: number;
   };
 
   type CreateAccount = {
     type: 'CreateAccount';
     input: {
       id: string;
-      pw: string;
     };
     data?: {
       seedPhrase: string;
       publicKey: string;
       secretKey: string;
     };
+    code: number;
   };
 
   type GetPhrase = {
@@ -78,6 +81,7 @@ declare global {
     data: {
       seedPhrase: string;
     };
+    code: number;
   };
 
   type Message = LoginNear | LogoutNear | CreateAccount | GetPhrase;
