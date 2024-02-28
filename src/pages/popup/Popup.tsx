@@ -8,17 +8,21 @@ import LoginWalletSection from '@root/src/pages/popup/app/login-wallet/index';
 import CreateWalletSection from '@root/src/pages/popup/app/create-wallet/index';
 import ImportWalletSection from '@root/src/pages/popup/app/import-wallet/index';
 import HomeSection from '@root/src/pages/popup/app/home/index';
+import TestSection from './app/test';
+import LoadingModal from './components/LoadingModal';
 
 function Popup() {
   const { pathname } = useRouter();
 
   return (
     <MainLayout>
+      <LoadingModal />
       {pathname === '/' && <InitSection />}
       {pathname === '/login-wallet' && <LoginWalletSection />}
       {pathname === '/create-wallet' && <CreateWalletSection />}
       {pathname === '/import-wallet' && <ImportWalletSection />}
       {pathname === '/home' && <HomeSection />}
+      {pathname === '/test' && <TestSection />}
     </MainLayout>
   );
 }

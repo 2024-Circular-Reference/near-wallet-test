@@ -46,9 +46,11 @@ chrome.runtime.onConnect.addListener(port => {
             sendResponse({
               type: 'CreateAccount',
               data: {
-                seedPhrase,
-                publicKey,
-                secretKey,
+                account: {
+                  seedPhrase,
+                  publicKey,
+                  secretKey,
+                },
               },
               code: 200,
             });

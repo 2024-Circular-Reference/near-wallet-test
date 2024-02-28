@@ -1,4 +1,5 @@
 import type Chrome from 'chrome';
+import { Seed } from 'near-seed-phrase';
 
 declare namespace chrome {
   export default Chrome;
@@ -68,9 +69,7 @@ declare global {
       id: string;
     };
     data?: {
-      seedPhrase: string;
-      publicKey: string;
-      secretKey: string;
+      account: Seed;
     };
     code: number;
   };

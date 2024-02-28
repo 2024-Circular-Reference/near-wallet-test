@@ -27,7 +27,6 @@ export default function InitSection() {
 
   const handleSubmit = async () => {
     if (accountIdRef.current?.value !== '') {
-      console.log('login');
       const isAvailable = await isAccountIdAvailable(accountIdRef.current.value + '.testnet');
       setIsAvailable(isAvailable);
       if (!isAvailable) {
