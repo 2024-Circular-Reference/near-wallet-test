@@ -2,7 +2,7 @@ import NearProtocolImage from '@assets/img/near-protocol-logo.png';
 import Link from '../../components/Link';
 import { useRef, useState } from 'react';
 import { sendMessageToBackgroundAsync } from '@root/src/chrome/message';
-import { createNearAccountOnTestnet, isAccountIdAvailable } from '@root/src/pages/lib/near/account';
+import { isAccountIdAvailable } from '@root/src/pages/lib/near/account';
 import { useRouter } from '@root/src/stores/useRouter';
 import { cls } from '@root/utils/util';
 
@@ -30,12 +30,10 @@ export default function InitSection() {
       console.log('login');
       const isAvailable = await isAccountIdAvailable(accountIdRef.current.value + '.testnet');
       setIsAvailable(isAvailable);
-      // if (!isAvailable) {
-      //   alert('Account ID is already used');
-      //   return;
-      // }
-      // const res = await createAccount(accountIdRef.current.value, accountPwRef.current.value);
-      // console.log(res.seedPhrase, res.publicKey, res.secretKey);
+      if (!isAvailable) {
+        alert(`Account ID${accountIdRef.current.value} is already used`);
+        return;
+      }
 
       const res = await createAccount(accountIdRef.current.value + '.testnet');
       alert(res);
