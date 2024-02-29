@@ -4,7 +4,8 @@ import { WalletStorage } from '@pages/background/lib/storage/walletStorage';
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script';
 import 'webextension-polyfill';
 import Logger from '@src/pages/lib/utils/logger';
-import { createNearAccountOnTestnet } from '../lib/near/account';
+import { wallet } from '../lib/near/wallet';
+import { UserAccount } from '@root/src/types/wallet';
 
 reloadOnUpdate('pages/background');
 
@@ -39,18 +40,19 @@ chrome.runtime.onConnect.addListener(port => {
         }
         case 'CreateAccount': {
           console.log('create account!');
-          const res = await createNearAccountOnTestnet(message.input.id);
-          if (res) {
-            const { seedPhrase, publicKey, secretKey } = res;
-            await WalletStorage.setAccount(message.input.id, seedPhrase, publicKey, secretKey);
+          const success = await wallet.createAccountOnTestnet(message.input.id);
+          if (success) {
+            const { accountId, seedPhrase, publicKey, secretKey } = wallet.getAccount();
+            await WalletStorage.setAccount(accountId, seedPhrase, publicKey, secretKey);
             sendResponse({
               type: 'CreateAccount',
               data: {
                 account: {
+                  accountId,
                   seedPhrase,
                   publicKey,
                   secretKey,
-                },
+                } as UserAccount,
               },
               code: 200,
             });

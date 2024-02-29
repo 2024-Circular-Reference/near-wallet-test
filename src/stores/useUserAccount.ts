@@ -1,18 +1,12 @@
-import { Seed } from 'near-seed-phrase';
 import { create } from 'zustand';
+import { UserAccount } from '../types/wallet';
 
 interface UserAccountState {
-  accountId: string;
-  accountSeed: Seed;
-  setUserAccount: (accountId: string, accountSeed: Seed) => void;
+  userAccount: UserAccount | null;
+  setUserAccount: (userAccount: UserAccount) => void;
 }
 
 export const useUserAccount = create<UserAccountState>(set => ({
-  accountId: '',
-  accountSeed: {
-    seedPhrase: '',
-    publicKey: '',
-    secretKey: '',
-  },
-  setUserAccount: (accountId: string, accountSeed: Seed) => set({ accountId, accountSeed }),
+  userAccount: null,
+  setUserAccount: userAccount => set({ userAccount }),
 }));

@@ -1,5 +1,6 @@
 import type Chrome from 'chrome';
 import { Seed } from 'near-seed-phrase';
+import { UserAccount } from './types/wallet';
 
 declare namespace chrome {
   export default Chrome;
@@ -69,7 +70,7 @@ declare global {
       id: string;
     };
     data?: {
-      account: Seed;
+      account: UserAccount;
     };
     code: number;
   };

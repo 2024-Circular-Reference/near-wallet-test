@@ -1,6 +1,12 @@
-import { createNearAccountTest } from '@root/src/pages/lib/near/account';
-import { getDidList, registerDid } from '@root/src/pages/lib/near/contract';
 import { useState } from 'react';
+
+async function getDidList() {
+  return 'did:list';
+}
+
+async function registerDid() {
+  return 'did:register';
+}
 
 export default function HomeSection() {
   const [myDid, setMyDid] = useState('');
