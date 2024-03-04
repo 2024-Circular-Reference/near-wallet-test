@@ -2,7 +2,6 @@ import NearProtocolImage from '@assets/img/near-protocol-logo.png';
 import Link from '../../components/Link';
 import { useRef, useState } from 'react';
 import { sendMessageToBackgroundAsync } from '@root/src/chrome/message';
-import { isAccountIdAvailable } from '@root/src/pages/lib/near/account';
 import { useRouter } from '@root/src/stores/useRouter';
 import { cls } from '@root/utils/util';
 
@@ -27,16 +26,14 @@ export default function InitSection() {
 
   const handleSubmit = async () => {
     if (accountIdRef.current?.value !== '') {
-      const isAvailable = await isAccountIdAvailable(accountIdRef.current.value + '.testnet');
-      setIsAvailable(isAvailable);
-      if (!isAvailable) {
-        alert(`Account ID${accountIdRef.current.value} is already used`);
-        return;
-      }
-
-      const res = await createAccount(accountIdRef.current.value + '.testnet');
-      alert(res);
-
+      // const isAvailable = await isAccountIdAvailable(accountIdRef.current.value + '.testnet');
+      // setIsAvailable(isAvailable);
+      // if (!isAvailable) {
+      //   alert(`Account ID${accountIdRef.current.value} is already used`);
+      //   return;
+      // }
+      // const res = await createAccount(accountIdRef.current.value + '.testnet');
+      // alert(res);
       //setPathname('/create-wallet');
     } else {
       setIsAvailable(false);

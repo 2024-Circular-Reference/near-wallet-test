@@ -64,12 +64,11 @@ export default function TestSection() {
             Create Wallet
           </button>
         </form>
-        <p>your public key: ${userAccount.publicKey}</p>
-        <p>your secret key: ${userAccount.secretKey}</p>
-        <p>your seed phrase: ${userAccount.seedPhrase}</p>
+        <p>your public key: ${userAccount?.publicKey}</p>
+        <p>your secret key: ${userAccount?.secretKey}</p>
+        <p>your seed phrase: ${userAccount?.seedPhrase}</p>
       </div>
       <div className="flex flex-col gap-y-4 w-full border rounded-2xl p-8">
-        con
         {/* VC 요청 테스트 */}
         <h2>VC 생성 테스트</h2>
         <form
