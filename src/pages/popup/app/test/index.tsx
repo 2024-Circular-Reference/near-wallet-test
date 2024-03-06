@@ -5,6 +5,7 @@ import { cls } from '@root/utils/util';
 import { useUserAccount } from '@root/src/stores/useUserAccount';
 import { FormEvent } from 'react/ts5.0';
 import { useLoading } from '@root/src/stores/useLoading';
+import { axios } from '@root/src/pages/lib/utils/axios';
 
 const createAccount = async (id: string) => {
   console.log('create account');
@@ -43,6 +44,28 @@ export default function TestSection() {
     }
   };
 
+  const onCreateVC = async (e: FormEvent) => {
+    e.preventDefault();
+    if (studentIdRef.current?.value !== '' && studentPwRef.current?.value !== '') {
+      const stId = studentIdRef.current.value;
+      const stPw = studentPwRef.current.value;
+      try {
+        const res = await axios({
+          method: 'get',
+          url: 'http://localhost:8081/api/holder/create-vc',
+          params: {
+            stNum: stId,
+            stPwd: stPw,
+            holderPubkey: userAccount?.publicKey,
+          },
+        });
+        console.log(res);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
   return (
     <section className="flex flex-col items-center gap-y-12 px-24">
       <div className="flex flex-col gap-y-4 w-full border rounded-2xl p-8">
@@ -75,7 +98,8 @@ export default function TestSection() {
           className={cls(
             'overflow-hidden text-base flex flex-col gap-y-8',
             isAvailable ? 'border-green-300' : 'border-red-500',
-          )}>
+          )}
+          onSubmit={onCreateVC}>
           <div className="flex relative rounded-full border text-lg overflow-hidden">
             <input ref={studentIdRef} placeholder="Student ID" className="pl-8 focus:outline-none" type="text" />
           </div>
