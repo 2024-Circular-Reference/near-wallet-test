@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { sendMessageToBackgroundAsync } from '@root/src/chrome/message';
 import { useRouter } from '@root/src/stores/useRouter';
 import { cls } from '@root/utils/util';
@@ -6,6 +6,7 @@ import { useUserAccount } from '@root/src/stores/useUserAccount';
 import { FormEvent } from 'react/ts5.0';
 import { useLoading } from '@root/src/stores/useLoading';
 import { axios } from '@root/src/pages/lib/utils/axios';
+import { UserAccount } from '@root/src/types/wallet';
 
 const createAccount = async (id: string) => {
   console.log('create account');
@@ -34,9 +35,14 @@ export default function TestSection() {
     if (accountIdRef.current?.value !== '') {
       const newAccountId = accountIdRef.current.value + '.testnet';
       setLoading(true);
-      const currentUserAccount = await createAccount(newAccountId);
-      console.log(currentUserAccount);
-      setUserAccount(currentUserAccount);
+      const res = await createAccount(newAccountId);
+      console.log(res);
+      if (res.code === 400) {
+        setIsAvailable(false);
+        setLoading(false);
+        return;
+      }
+      setUserAccount(res);
       setLoading(false);
       //setPathname('/create-wallet');
     } else {
@@ -65,6 +71,12 @@ export default function TestSection() {
       }
     }
   };
+
+  useEffect(() => {
+    if (userAccount.accountId) {
+      accountIdRef.current.value = userAccount.accountId;
+    }
+  }, []);
 
   return (
     <section className="flex flex-col items-center gap-y-12 px-24">
