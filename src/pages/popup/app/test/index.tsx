@@ -5,7 +5,7 @@ import { cls } from '@root/utils/util';
 import { useUserAccount } from '@root/src/stores/useUserAccount';
 import { FormEvent } from 'react/ts5.0';
 import { useLoading } from '@root/src/stores/useLoading';
-import { axios } from '@root/src/pages/lib/utils/axios';
+import axios from '@root/src/pages/lib/utils/axios';
 import { UserAccount } from '@root/src/types/wallet';
 
 const createAccount = async (id: string) => {
@@ -29,6 +29,7 @@ export default function TestSection() {
   const studentPwRef = useRef<HTMLInputElement>();
   const { userAccount, setUserAccount } = useUserAccount();
   const { setLoading } = useLoading();
+  const [mockStatus, setMockStatus] = useState({ available: false, message: '' });
 
   const onCreateAccount = async (e: FormEvent) => {
     e.preventDefault();
@@ -47,6 +48,20 @@ export default function TestSection() {
       //setPathname('/create-wallet');
     } else {
       alert('account id is empty');
+    }
+  };
+
+  const onCreateMockUser = async () => {
+    if (!mockStatus.available) {
+      const res = await axios({
+        method: 'get',
+        url: 'http://localhost:4000/api',
+      });
+      if (res) {
+        setMockStatus({ available: true, message: 'Success!!' });
+      } else {
+        setMockStatus({ available: false, message: 'Failed..' });
+      }
     }
   };
 
@@ -102,6 +117,13 @@ export default function TestSection() {
         <p>your public key: ${userAccount?.publicKey}</p>
         <p>your secret key: ${userAccount?.secretKey}</p>
         <p>your seed phrase: ${userAccount?.seedPhrase}</p>
+      </div>
+      {/* 모킹 데이터 생성 버튼 */}
+      <div className="flex flex-col gap-y-4 w-full">
+        <button className="p-12 bg-orange-500 rounded-2xl" onClick={onCreateMockUser}>
+          모킹 데이터 생성
+        </button>
+        <p>Result: {mockStatus.message}</p>
       </div>
       <div className="flex flex-col gap-y-4 w-full border rounded-2xl p-8">
         {/* VC 요청 테스트 */}
