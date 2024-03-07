@@ -135,10 +135,22 @@ export default function TestSection() {
           )}
           onSubmit={onCreateVC}>
           <div className="flex relative rounded-full border text-lg overflow-hidden">
-            <input ref={studentIdRef} placeholder="Student ID" className="pl-8 focus:outline-none" type="text" />
+            <input
+              ref={studentIdRef}
+              defaultValue="20201111"
+              placeholder="Student ID"
+              className="pl-8 focus:outline-none"
+              type="text"
+            />
           </div>
           <div className="flex relative rounded-full border text-lg overflow-hidden">
-            <input ref={studentPwRef} placeholder="Student Password" className="pl-8 focus:outline-none" type="text" />
+            <input
+              ref={studentPwRef}
+              defaultValue="pwd1111"
+              placeholder="Student Password"
+              className="pl-8 focus:outline-none"
+              type="text"
+            />
           </div>
           <button className="flex items-center justify-center w-full py-8 h-32 bg-indigo-600 text-base text-white rounded-full">
             VC 생성 요청
