@@ -7,6 +7,7 @@ import { FormEvent } from 'react/ts5.0';
 import { useLoading } from '@root/src/stores/useLoading';
 import axios from '@root/src/pages/lib/utils/axios';
 import { UserAccount } from '@root/src/types/wallet';
+import { IProofData } from '@root/src/types/proof';
 
 const createAccount = async (id: string) => {
   console.log('create account');
@@ -30,6 +31,15 @@ export default function TestSection() {
   const { userAccount, setUserAccount } = useUserAccount();
   const { setLoading } = useLoading();
   const [mockStatus, setMockStatus] = useState({ available: false, message: '' });
+  const [proofData, setProofData] = useState<IProofData>({
+    vc: null,
+    vp: '',
+    issuerPubKey: '',
+    did: '',
+    didDocument: '',
+    zkpProof: '',
+    message: '',
+  });
 
   const onCreateAccount = async (e: FormEvent) => {
     e.preventDefault();
@@ -77,12 +87,23 @@ export default function TestSection() {
           params: {
             stNum: stId,
             stPwd: stPw,
-            holderPubkey: userAccount?.publicKey,
+            holderPubKey: userAccount?.publicKey,
           },
         });
         console.log(res);
+        if (res.statusCode === 200) {
+          setProofData(prev => ({
+            ...prev,
+            vc: res.data.vc,
+            issuerPubKey: res.data.issuerPubKey,
+            message: 'success create vc',
+          }));
+        } else {
+          throw new Error('failed create vc' + res.message);
+        }
       } catch (e) {
         console.error(e);
+        setProofData(prev => ({ ...prev, message: e.message }));
       }
     }
   };
@@ -119,11 +140,11 @@ export default function TestSection() {
         <p>your seed phrase: ${userAccount?.seedPhrase}</p>
       </div>
       {/* 모킹 데이터 생성 버튼 */}
-      <div className="flex flex-col gap-y-4 w-full">
+      <div className="flex flex-col gap-y-4 w-full border rounded-2xl p-8">
         <button className="p-12 bg-orange-500 rounded-2xl" onClick={onCreateMockUser}>
           모킹 데이터 생성
         </button>
-        <p>Result: {mockStatus.message}</p>
+        <p className="text-red-400">Result: {mockStatus.message}</p>
       </div>
       <div className="flex flex-col gap-y-4 w-full border rounded-2xl p-8">
         {/* VC 요청 테스트 */}
@@ -156,8 +177,9 @@ export default function TestSection() {
             VC 생성 요청
           </button>
         </form>
-        <p>your did document: </p>
-        <p>your original VC: </p>
+        <p className="text-red-400">Result: {proofData.message}</p>
+        <p>your did document: {JSON.stringify(proofData.didDocument)}</p>
+        <p>your original VC: {JSON.stringify(proofData.vc)}</p>
       </div>
     </section>
   );
