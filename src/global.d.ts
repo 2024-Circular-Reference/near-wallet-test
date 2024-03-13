@@ -84,7 +84,19 @@ declare global {
     code: number;
   };
 
-  type Message = LoginNear | LogoutNear | CreateAccount | GetPhrase;
+  type ExecWasm = {
+    type: 'ExecWasm';
+    input: {
+      num1: number;
+      num2: number;
+    };
+    data?: {
+      res: number;
+    };
+    code: number;
+  };
+
+  type Message = LoginNear | LogoutNear | CreateAccount | GetPhrase | ExecWasm;
 
   type RequestMessage<M = Message> = Omit<M, 'data'>;
   type ResponseMessage<M = Message> = Omit<M, 'input' | 'error'>;

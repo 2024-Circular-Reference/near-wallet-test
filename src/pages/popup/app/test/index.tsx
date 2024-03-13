@@ -6,7 +6,6 @@ import { useUserAccount } from '@root/src/stores/useUserAccount';
 import { FormEvent } from 'react/ts5.0';
 import { useLoading } from '@root/src/stores/useLoading';
 import axios from '@root/src/pages/lib/utils/axios';
-import { UserAccount } from '@root/src/types/wallet';
 import { IProofData } from '@root/src/types/proof';
 
 const createAccount = async (id: string) => {
@@ -20,6 +19,20 @@ const createAccount = async (id: string) => {
   });
 
   return res.account;
+};
+
+const execWasm = async (num1: number, num2: number) => {
+  console.log('exec wasm');
+  const res = await sendMessageToBackgroundAsync({
+    type: 'ExecWasm',
+    input: {
+      num1: num1,
+      num2: num2,
+    },
+    code: 200,
+  });
+
+  return res.res;
 };
 
 export default function TestSection() {
@@ -81,6 +94,7 @@ export default function TestSection() {
       const stId = studentIdRef.current.value;
       const stPw = studentPwRef.current.value;
       try {
+        console.log(userAccount?.publicKey);
         const res = await axios({
           method: 'get',
           url: 'http://localhost:8081/api/holder/create-vc',
@@ -91,20 +105,33 @@ export default function TestSection() {
           },
         });
         console.log(res);
-        if (res.statusCode === 200) {
+        if (res.data.statusCode === 200) {
           setProofData(prev => ({
             ...prev,
-            vc: res.data.vc,
-            issuerPubKey: res.data.issuerPubKey,
+            vc: res.data.data.vc,
+            issuerPubKey: res.data.data.issuerPubKey,
             message: 'success create vc',
           }));
         } else {
-          throw new Error('failed create vc' + res.message);
+          throw new Error('failed create vc' + res);
         }
       } catch (e) {
         console.error(e);
         setProofData(prev => ({ ...prev, message: e.message }));
       }
+    }
+  };
+
+  const [wasmResult, setWasmResult] = useState<number | null>(null);
+  const input1Ref = useRef<HTMLInputElement>();
+  const input2Ref = useRef<HTMLInputElement>();
+
+  const onWasmTest = async () => {
+    if (input1Ref.current?.value && input2Ref.current?.value) {
+      const num1 = Number(input1Ref.current.value);
+      const num2 = Number(input2Ref.current.value);
+      const result = await execWasm(num1, num2);
+      setWasmResult(result);
     }
   };
 
@@ -116,8 +143,8 @@ export default function TestSection() {
 
   return (
     <section className="flex flex-col items-center gap-y-12 px-24">
+      {/* 계정 생성 테스트 */}
       <div className="flex flex-col gap-y-4 w-full border rounded-2xl p-8">
-        {/* 계정 생성 테스트 */}
         <h2>계정 생성 테스트</h2>
         <form
           onSubmit={onCreateAccount}
@@ -146,8 +173,8 @@ export default function TestSection() {
         </button>
         <p className="text-red-400">Result: {mockStatus.message}</p>
       </div>
+      {/* VC 요청 테스트 */}
       <div className="flex flex-col gap-y-4 w-full border rounded-2xl p-8">
-        {/* VC 요청 테스트 */}
         <h2>VC 생성 테스트</h2>
         <form
           className={cls(
@@ -181,6 +208,21 @@ export default function TestSection() {
         <p>your did document: {JSON.stringify(proofData.didDocument)}</p>
         <p>your original VC: {JSON.stringify(proofData.vc)}</p>
       </div>
+      {/* WASM 테스트 */}
+      <div className="flex flex-col gap-y-4 w-full border rounded-2xl p-8">
+        <h2>WASM 테스트</h2>
+        <div className="flex relative rounded-full border text-lg overflow-hidden">
+          <input ref={input1Ref} placeholder="input 1" className="pl-8 focus:outline-none" type="text" />
+        </div>
+        <div className="flex relative rounded-full border text-lg overflow-hidden">
+          <input ref={input2Ref} placeholder="input 2" className="pl-8 focus:outline-none" type="text" />
+        </div>
+        <button className="p-12 bg-orange-500 rounded-2xl" onClick={onWasmTest}>
+          WASM 테스트
+        </button>
+        <p>wasm result: {wasmResult}</p>
+      </div>
+      <div className="h-20" />
     </section>
   );
 }
