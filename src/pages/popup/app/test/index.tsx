@@ -92,6 +92,7 @@ export default function TestSection() {
   const onCreateVC = async (e: FormEvent) => {
     e.preventDefault();
     if (studentIdRef.current?.value !== '' && studentPwRef.current?.value !== '') {
+      setLoading(true);
       const stId = studentIdRef.current.value;
       const stPw = studentPwRef.current.value;
       try {
@@ -107,9 +108,15 @@ export default function TestSection() {
         });
         console.log(res);
         if (res.data.statusCode === 200) {
+          // TODO: 생성된 VC 검증하는 로직 구현
           setProofData(prev => ({
             ...prev,
             vc: res.data.data.vc,
+            vp: {
+              '@context': ['https://www.w3.org/2018/credentials/v1'],
+              type: ['VerifiablePresentation'],
+              verifiableCredential: [res.data.data.vc],
+            },
             issuerPubKey: res.data.data.issuerPubKey,
             message: 'success create vc',
           }));
@@ -120,6 +127,7 @@ export default function TestSection() {
         console.error(e);
         setProofData(prev => ({ ...prev, message: e.message }));
       }
+      setLoading(false);
     }
   };
 
@@ -206,8 +214,9 @@ export default function TestSection() {
           </button>
         </form>
         <p className="text-red-400">Result: {proofData.message}</p>
-        <p>your did document: {JSON.stringify(proofData.didDocument)}</p>
+        <p>your issuerPubKey: {JSON.stringify(proofData.issuerPubKey)}</p>
         <p>your original VC: {JSON.stringify(proofData.vc)}</p>
+        <p>your original VP: {JSON.stringify(proofData.vp)}</p>
       </div>
       {/* WASM 테스트 */}
       <div className="flex flex-col gap-y-4 w-full border rounded-2xl p-8">
