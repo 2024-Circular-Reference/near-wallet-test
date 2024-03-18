@@ -77,9 +77,10 @@ export default function TestSection() {
   const onCreateMockUser = async () => {
     if (!mockStatus.available) {
       const res = await axios({
-        method: 'get',
-        url: 'http://localhost:4000/api',
+        method: 'post',
+        url: 'http://localhost:4000/api/service/init-mock',
       });
+      console.log(res);
       if (res) {
         setMockStatus({ available: true, message: 'Success!!' });
       } else {
