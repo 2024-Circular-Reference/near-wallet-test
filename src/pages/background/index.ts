@@ -6,7 +6,6 @@ import 'webextension-polyfill';
 import Logger from '@src/pages/lib/utils/logger';
 import { wallet } from '../lib/near/wallet';
 import { UserAccount } from '@root/src/types/wallet';
-import __wbg_init, { initSync } from '@root/src/wasm/pkg/wasm_test';
 
 reloadOnUpdate('pages/background');
 
@@ -78,12 +77,10 @@ chrome.runtime.onConnect.addListener(port => {
           break;
         }
         case 'ExecWasm': {
-          const result = await __wbg_init('/wasm_test_bg.wasm');
-          const res = result.add(message.input.num1, message.input.num2);
           sendResponse({
             type: 'ExecWasm',
             data: {
-              res,
+              res: 1001,
             },
             code: 200,
           });

@@ -8,6 +8,7 @@ import customDynamicImport from './utils/plugins/custom-dynamic-import';
 import addHmr from './utils/plugins/add-hmr';
 import watchRebuild from './utils/plugins/watch-rebuild';
 import inlineVitePreloadScript from './utils/plugins/inline-vite-preload-script';
+import vitePluginWasmPack from 'vite-plugin-wasm-pack';
 
 const rootDir = resolve(__dirname);
 const srcDir = resolve(rootDir, 'src');
@@ -48,6 +49,7 @@ export default defineConfig({
         global: true,
       },
     }),
+    vitePluginWasmPack(['zkp_circuit']),
   ],
   publicDir,
   build: {
@@ -55,7 +57,7 @@ export default defineConfig({
     /** Can slow down build speed. */
     // sourcemap: isDev,
     minify: isProduction,
-    modulePreload: false,
+    modulePreload: true,
     reportCompressedSize: isProduction,
     emptyOutDir: !isDev,
     rollupOptions: {
@@ -87,6 +89,8 @@ export default defineConfig({
     include: ['**/*.test.ts', '**/*.test.tsx'],
     setupFiles: './test-utils/vitest.setup.js',
   },
+  logLevel: 'info',
+  experimental: {},
 });
 
 function getCacheInvalidationKey() {

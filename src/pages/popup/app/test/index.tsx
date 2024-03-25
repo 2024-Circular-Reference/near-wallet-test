@@ -8,6 +8,8 @@ import { useLoading } from '@root/src/stores/useLoading';
 import axios from '@root/src/pages/lib/utils/axios';
 import { IProofData } from '@root/src/types/proof';
 
+import init, { wasm_test } from 'zkp_circuit';
+
 const createAccount = async (id: string) => {
   console.log('create account');
   const res = await sendMessageToBackgroundAsync({
@@ -22,7 +24,7 @@ const createAccount = async (id: string) => {
 };
 
 const execWasm = async (num1: number, num2: number) => {
-  console.log('exec wasm');
+  console.log('exec zkp');
   const res = await sendMessageToBackgroundAsync({
     type: 'ExecWasm',
     input: {
@@ -137,10 +139,13 @@ export default function TestSection() {
 
   const onWasmTest = async () => {
     if (input1Ref.current?.value && input2Ref.current?.value) {
-      const num1 = Number(input1Ref.current.value);
-      const num2 = Number(input2Ref.current.value);
-      const result = await execWasm(num1, num2);
-      setWasmResult(result);
+      let res = 0;
+      init().then(() => {
+        console.log('init wasm');
+        res = wasm_test();
+        console.log(res);
+        setWasmResult(res);
+      });
     }
   };
 
